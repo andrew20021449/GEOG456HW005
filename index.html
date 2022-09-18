@@ -35,7 +35,7 @@
     }).addTo(map);
 
     function myStyle(feature) {
-        // console.log(feature.properties.begin)
+        // console.log(feature.properties.openyear) returns null or undefined for all variables in here?
         return {
     "color": "#ff0000", 
     "weight": 5,
@@ -55,7 +55,7 @@ function moveSlider(value) {
     }
     moveSlider(myCurrentSelectionYear)
 for (let i = 0; i < stationjson.length; i++) {
-    // removeLayer(stationjson.begin < myCurrentSelectionYear)
+    // removeLayer(stationjson.openyear < myCurrentSelectionYear) probably not the right function but can't tell with variable broken
 }
 </script>
     
