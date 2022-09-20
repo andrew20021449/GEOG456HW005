@@ -24,8 +24,6 @@
 
 <body>
 </br>
-<h3 id="daYear">Year</h3>
-<input type="range" name="year" min="1970" max="2022" oninput="moveSlider(this.value)">
 <button onclick='stationjson.clearLayers()'>Clear Layers</button>
 <div id="map"></div>
 <script>
@@ -37,26 +35,56 @@
     function myStyle(feature) {
         // console.log(feature.properties.openyear)
         return {
-    "color": "#ff0000", 
-    "weight": 5,
+    "color": "#000000", 
+    "weight": 2,
     "opacity": 1
         }
 };
-var stationjson = L.geoJSON(BARTStations, {style: myStyle}).addTo(map);
-var linesjson = L.geoJSON(BARTLines, {style: myStyle}).addTo(map);
-console.log(stationjson.openyear)
-var myCurrentSelectionYear = 1970;
-function moveSlider(value) {
-    console.log(value)
-    document.getElementById('daYear').innerHTML = 'Year: ' + value
-    myCurrentSelectionYear = value
-    stationjson.resetStyle()
-    // console.log(myCurrentSelectionYear)
+// var stationjson = L.geoJSON(BARTStations, {style: myStyle}).addTo(map);
+function yearToColor(year) {
+    var yn = parseInt(year)
+    if (yn < 1975) {
+        return 'black'
     }
-    moveSlider(myCurrentSelectionYear)
-for (let i = 0; i < stationjson.length; i++) {
-    // removeLayer(stationjson.openyear < myCurrentSelectionYear) probably not the right function but can't tell with variable broken
+    else if (yn < 2000){
+        return 'red'
+    }
+    else if (yn < 2015) {
+        return 'orange'
+    }
+    else {
+        return 'yellow'
+    }
 }
+var year = 1970
+var linesjson = L.geoJSON(BARTLines, {style: myStyle}).addTo(map);
+function pointOptions(feature) {
+    geojsonMarkerOptions = {
+    radius: 6,
+    fillColor: yearToColor(feature.properties.openyear),
+    color: yearToColor(feature.properties.openyear),
+    weight: 1,
+    opacity: 1,
+    fillOpacity: 1
+}
+return geojsonMarkerOptions
+} 
+L.geoJSON(BARTStations, {
+    pointToLayer: function (feature, latlng) {
+        return L.circleMarker(latlng, pointOptions(feature));
+    }
+}).addTo(map);
+// console.log(stationjson.openyear)
+
+var myCurrentSelectionYear = 1970;
+// function moveSlider(value) {
+    // console.log(value)
+    // document.getElementById('daYear').innerHTML = 'Year: ' + value
+    // myCurrentSelectionYear = value
+    // pointOptions.resetStyle()
+    // console.log(myCurrentSelectionYear)
+    // }
+    // moveSlider(myCurrentSelectionYear)
 </script>
     
 </body>
